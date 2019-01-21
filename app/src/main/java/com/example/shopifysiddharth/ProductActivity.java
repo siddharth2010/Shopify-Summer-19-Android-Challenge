@@ -69,9 +69,6 @@ public class ProductActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.about:
-                Intent intent = new Intent(this, AboutActivity.class);
-                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

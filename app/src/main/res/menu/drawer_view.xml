@@ -2,9 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/about"
-            android:icon="@drawable/heart"
-            android:title="About" />
+            android:title="Siddharth Sharma" />
+
+        <item
+            android:title="GitHub: @siddharth2010" />
+
+        <item
+            android:title="Email: ssiddharth2010@gmail.com" />
+
+        <item
+            android:title="LinkedIn: in/siddharthks" />
+
+        <item
+            android:title="Phone: +91-9877305966" />
 
 
     </group>
