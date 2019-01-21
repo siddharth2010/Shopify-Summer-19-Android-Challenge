@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.example.shopifysiddharth.adapter.ProductAdapter;
+import com.example.shopifysiddharth.util.myAsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +59,8 @@ public class ProductActivity extends AppCompatActivity {
         String collectionid = intent.getStringExtra("key");
         ans = collectionid;
         recyclerView = (RecyclerView) findViewById(R.id.rv_product);
-        TsunamiAsyncTask task = new TsunamiAsyncTask();
+        ProductAsyncTask task = new ProductAsyncTask("", "https://shopicruit.myshopify.com/admin/collects.json?collection_id=" +
+                ans + "&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6");
         task.execute();
 
     }
@@ -79,85 +81,21 @@ public class ProductActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private class TsunamiAsyncTask extends AsyncTask<URL, Void, String> {
+    private class ProductAsyncTask extends myAsyncTask {
 
-        private URL createUrl(String stringUrl) {
-            URL url = null;
-            try {
-                url = new URL(stringUrl);
-            } catch (MalformedURLException exception) {
-                return null;
-            }
-            return url;
-        }
-        @Override
-        protected String doInBackground(URL... urls) {
-            URL url = createUrl("https://shopicruit.myshopify.com/admin/collects.json?collection_id=" +
-                    ans + "&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6");
-
-            String jsonResponse = "";
-            try {
-                jsonResponse = makeHttpRequest(url);
-            } catch (IOException e) {
-                // Do Nothing
-            }
-            test = jsonResponse;
-            extractFeatureFrom(jsonResponse);
-            return jsonResponse;
+        public ProductAsyncTask(String test, String baseUrl) {
+            super(test, baseUrl);
         }
 
         @Override
-        protected void onPostExecute(String e) {
-
-            updateui();
-        }
-
-        private void updateui(){
-            Tsunami task = new Tsunami();
+        public void updateui(){
+            PruductListui task = new PruductListui("", "");
             task.execute();
         }
 
-        private String makeHttpRequest(URL url) throws IOException {
-            String jsonResponse = "";
-            HttpURLConnection urlConnection = null;
-            InputStream inputStream = null;
-            try {
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setReadTimeout(10000 /* milliseconds */);
-                urlConnection.setConnectTimeout(15000 /* milliseconds */);
-                urlConnection.connect();
-                inputStream = urlConnection.getInputStream();
-                jsonResponse = readFromStream(inputStream);
-            } catch (IOException e) {
-                // Do Nothing
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            }
-            return jsonResponse;
-        }
 
-
-        private String readFromStream(InputStream inputStream) throws IOException {
-            StringBuilder output = new StringBuilder();
-            if (inputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-                BufferedReader reader = new BufferedReader(inputStreamReader);
-                String line = reader.readLine();
-                while (line != null) {
-                    output.append(line);
-                    line = reader.readLine();
-                }
-            }
-            return output.toString();
-        }
-
-        private ArrayList<String> extractFeatureFrom(String anss) {
+        @Override
+        public ArrayList<String> extractFeatureFrom(String anss) {
             ArrayList<String> ans = new ArrayList<>();
             try {
                 JSONObject Response = new JSONObject(anss);
@@ -175,12 +113,15 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
-    private class Tsunami extends AsyncTask<URL, Void, String> {
+    private class PruductListui extends myAsyncTask {
+
+        public PruductListui(String test, String baseUrl) {
+            super(test, baseUrl);
+        }
 
         @Override
-        protected String doInBackground(URL... urls) {
+        public String doInBackground(URL... urls) {
             String ans =  TextUtils.join(",", product);
-
 
             URL url = createUrl
                     ("https://shopicruit.myshopify.com/admin/products.json?ids=" + ans + "&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6");
@@ -191,76 +132,28 @@ public class ProductActivity extends AppCompatActivity {
             } catch (IOException e) {
                 // Do Nothing
             }
-            String sq = extractFeatureFrom(jsonResponse);
-            return sq;
+            ArrayList<String> sq = extractFeatureFrom(jsonResponse);
+            return sq.get(0);
         }
 
         @Override
-        protected void onPostExecute(String e) {
+        public void onPostExecute(String e) {
             updateui();
         }
 
-        private void updateui(){
+        @Override
+        public void updateui() {
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            ProductAdapter Adapter = new ProductAdapter(getApplicationContext(),(ArrayList<String>) product, (ArrayList<String>) pname);
+            ProductAdapter Adapter = new ProductAdapter(getApplicationContext(), (ArrayList<String>) product, (ArrayList<String>) pname);
 
             recyclerView.setAdapter(Adapter);
             recyclerView.setHasFixedSize(true);
         }
 
-        private URL createUrl(String stringUrl) {
-            URL url = null;
-            try {
-                url = new URL(stringUrl);
-            } catch (MalformedURLException exception) {
-                return null;
-            }
-            return url;
-        }
-
-
-        private String makeHttpRequest(URL url) throws IOException {
-            String jsonResponse = "";
-            HttpURLConnection urlConnection = null;
-            InputStream inputStream = null;
-            try {
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setReadTimeout(10000);
-                urlConnection.setConnectTimeout(15000);
-                urlConnection.connect();
-                inputStream = urlConnection.getInputStream();
-                jsonResponse = readFromStream(inputStream);
-            } catch (IOException e) {
-                // Do Nothing
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            }
-            return jsonResponse;
-        }
-
-        private String readFromStream(InputStream inputStream) throws IOException {
-            StringBuilder output = new StringBuilder();
-            if (inputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-                BufferedReader reader = new BufferedReader(inputStreamReader);
-                String line = reader.readLine();
-                while (line != null) {
-                    output.append(line);
-                    line = reader.readLine();
-                }
-            }
-            return output.toString();
-        }
-
-        private String extractFeatureFrom(String anss) {
+        @Override
+        public ArrayList<String> extractFeatureFrom(String anss) {
 
             try {
                 JSONObject Response = new JSONObject(anss);
@@ -286,7 +179,10 @@ public class ProductActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 // Do Nothing
             }
-            return ans;
+
+            ArrayList<String> s = new ArrayList<String>(0);
+            s.add(ans);
+            return s;
         }
     }
 }

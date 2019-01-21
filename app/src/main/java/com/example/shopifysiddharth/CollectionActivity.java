@@ -77,7 +77,8 @@ public class CollectionActivity extends AppCompatActivity {
         public CollectionsAsyncTask(String test, String baseUrl) {
             super(test, baseUrl);
         }
-        
+
+        @Override
         public void updateui(){
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(mLayoutManager);
