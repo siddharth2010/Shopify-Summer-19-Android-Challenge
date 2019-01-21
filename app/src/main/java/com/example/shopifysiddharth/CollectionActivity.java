@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.shopifysiddharth.adapter.CollectionAdapter;
 
@@ -39,7 +38,7 @@ public class CollectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.rv_collection);
 
         TsunamiAsyncTask task = new TsunamiAsyncTask();
         task.execute();
@@ -65,7 +64,7 @@ public class CollectionActivity extends AppCompatActivity {
             try {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
-                // TODO Handle the IOException
+                // Do Nothing
             }
             test = jsonResponse;
             extractFeatureFrom(jsonResponse);
@@ -78,16 +77,10 @@ public class CollectionActivity extends AppCompatActivity {
         }
 
         private void updateui(){
-            // TextView prim = (TextView) findViewById(R.id.primary);
-            //prim.setText(test);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             mCollectionAdapter = new CollectionAdapter( getApplicationContext(),(ArrayList<String>) movieList);
-            if (movieList.size() == 0) {
-                Log.d("sssss" , "-----------------" + " 000000");
-            }
-
             recyclerView.setAdapter(mCollectionAdapter);
             recyclerView.setHasFixedSize(true);
         }
@@ -105,7 +98,7 @@ public class CollectionActivity extends AppCompatActivity {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } catch (IOException e) {
-                // TODO: Handle the exception
+                // Do Nothing
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -145,13 +138,10 @@ public class CollectionActivity extends AppCompatActivity {
                     coolid.add(PP.getString("id"));
                     JSONObject image = PP.getJSONObject("image");
                     img.add(image.getString("src"));
-                    // Log.i("nono" , " -------------------------   " + PP.getString("handle"));
-
-                    //img.add(PP.getString("src"));
                 }
             } catch (JSONException e) {
+                // Do Nothing
             }
-            // movieList = ans;
             return ans;
         }
     }

@@ -8,7 +8,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.shopifysiddharth.adapter.ProductAdapter;
 
@@ -42,10 +41,9 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
         Intent intent = getIntent();
-        Log.d("pp","    -----------------     ");
         String collectionid = intent.getStringExtra("key");
         ans = collectionid;
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerView = (RecyclerView) findViewById(R.id.rv_product);
         TsunamiAsyncTask task = new TsunamiAsyncTask();
         task.execute();
 
@@ -78,7 +76,7 @@ public class ProductActivity extends AppCompatActivity {
             try {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
-                // TODO Handle the IOException
+                // Do Nothing
             }
             test = jsonResponse;
             extractFeatureFrom(jsonResponse);
@@ -92,19 +90,6 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         private void updateui(){
-            // TextView prim = (TextView) findViewById(R.id.primary);
-            //prim.setText(test);
-            // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            //recyclerView.setLayoutManager(mLayoutManager);
-            //recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-            Log.i("momo" , " -------------------------   ");
-
-            // ProductAdapter Adapter = new ProductAdapter(getApplicationContext(),(ArrayList<String>) ProductActivity);
-
-            //recyclerView.setAdapter(Adapter);
-
-            //recyclerView.setHasFixedSize(true);
             Tsunami task = new Tsunami();
             task.execute();
         }
@@ -122,7 +107,7 @@ public class ProductActivity extends AppCompatActivity {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } catch (IOException e) {
-                // TODO: Handle the exception
+                // Do Nothing
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -158,14 +143,11 @@ public class ProductActivity extends AppCompatActivity {
                 JSONObject PP;
                 for (int i = 0 ; i < j ; i++){
                     PP =Array.getJSONObject(i);
-                    //movieList.add(PP.getString("title"));
                     product.add(PP.getString("product_id"));
-                    //coolid.add(PP.getString("id"));
-                    // Log.d("tot" , " ---------------------   " + String.valueOf(PP.getString("id")));
                 }
             } catch (JSONException e) {
+                // Do Nothing
             }
-            // movieList = ans;
             return ans;
         }
     }
@@ -184,7 +166,7 @@ public class ProductActivity extends AppCompatActivity {
             try {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
-                // TODO Handle the IOException
+                // Do Nothing
             }
             String sq = extractFeatureFrom(jsonResponse);
             return sq;
@@ -196,14 +178,9 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         private void updateui(){
-            // TextView prim = (TextView) findViewById(R.id.primary);
-            //prim.setText(test);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-            Log.i("momo" , " -------------------------   ");
-
             ProductAdapter Adapter = new ProductAdapter(getApplicationContext(),(ArrayList<String>) product, (ArrayList<String>) pname);
 
             recyclerView.setAdapter(Adapter);
@@ -228,13 +205,13 @@ public class ProductActivity extends AppCompatActivity {
             try {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
-                urlConnection.setReadTimeout(10000 /* milliseconds */);
-                urlConnection.setConnectTimeout(15000 /* milliseconds */);
+                urlConnection.setReadTimeout(10000);
+                urlConnection.setConnectTimeout(15000);
                 urlConnection.connect();
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } catch (IOException e) {
-                // TODO: Handle the exception
+                // Do Nothing
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -271,7 +248,7 @@ public class ProductActivity extends AppCompatActivity {
                 quanty.clear();
                 for (int i = 0 ; i < j ; i++){
                     PP =Array.getJSONObject(i);
-                    //movieList.add(PP.getString("title"));
+                    // Do Nothing
                     pname.add(PP.getString("title"));
                     JSONArray Array2 = PP.getJSONArray("variants");
                     int quantity = 0;
@@ -282,12 +259,10 @@ public class ProductActivity extends AppCompatActivity {
                         quantity = quantity + QQ.getInt("inventory_quantity");
                     }
                     quanty.add(quantity);
-                    //coolid.add(PP.getString("id"));
-                    Log.d("tot" , " ---------------------   " + PP.getString("title"));
                 }
             } catch (JSONException e) {
+                // Do Nothing
             }
-            // movieList = ans;
             return ans;
         }
     }
