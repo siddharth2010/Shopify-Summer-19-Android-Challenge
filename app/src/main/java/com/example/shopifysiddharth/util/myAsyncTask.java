@@ -25,10 +25,15 @@ import java.util.List;
 
 public class myAsyncTask extends AsyncTask<URL, Void, String> {
 
-    String test;
-    String baseUrl;
+    public myAsyncTask(String test, String baseUrl) {
+        this.test = test;
+        this.baseUrl = baseUrl;
+    }
 
-    private URL createUrl(String stringUrl) {
+    public String test;
+    public String baseUrl;
+
+    public URL createUrl(String stringUrl) {
         URL url = null;
         try {
             url = new URL(stringUrl);
@@ -38,7 +43,7 @@ public class myAsyncTask extends AsyncTask<URL, Void, String> {
         return url;
     }
     @Override
-    protected String doInBackground(URL... urls) {
+    public String doInBackground(URL... urls) {
         URL url = createUrl(baseUrl);
 
         String jsonResponse = "";
@@ -53,15 +58,15 @@ public class myAsyncTask extends AsyncTask<URL, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String e) {
+    public void onPostExecute(String e) {
         updateui();
     }
 
-    private void updateui(){
+    public void updateui(){
         // Do something
     }
 
-    private String makeHttpRequest(URL url) throws IOException {
+    public String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
@@ -87,7 +92,7 @@ public class myAsyncTask extends AsyncTask<URL, Void, String> {
     }
 
 
-    private String readFromStream(InputStream inputStream) throws IOException {
+    public String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
@@ -101,7 +106,7 @@ public class myAsyncTask extends AsyncTask<URL, Void, String> {
         return output.toString();
     }
 
-    private ArrayList<String> extractFeatureFrom(String anss) {
+    public ArrayList<String> extractFeatureFrom(String anss) {
         // Do something
         return new ArrayList<String>(0);
     }
