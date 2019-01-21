@@ -79,8 +79,6 @@ public class ProductActivity extends AppCompatActivity {
         this.finish();
     }
 
-
-
     private class TsunamiAsyncTask extends AsyncTask<URL, Void, String> {
 
         private URL createUrl(String stringUrl) {

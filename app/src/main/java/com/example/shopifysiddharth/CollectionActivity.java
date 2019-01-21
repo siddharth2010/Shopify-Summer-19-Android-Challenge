@@ -53,10 +53,7 @@ public class CollectionActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_view_headline_24px);
         mDrawerLayout = findViewById(R.id.drawer_layout);
-
         recyclerView = (RecyclerView) findViewById(R.id.rv_collection);
-
-
 
         TsunamiAsyncTask task = new TsunamiAsyncTask();
         task.execute();
