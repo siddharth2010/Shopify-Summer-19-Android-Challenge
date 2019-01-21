@@ -8,27 +8,49 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:showIn="@layout/activity_collection"
-            tools:context=".CollectionActivity">
+            android:layout_height="wrap_content">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_collection"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </LinearLayout>
+                tools:showIn="@layout/activity_collection"
+                tools:context=".CollectionActivity">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_collection"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
 
 
-    </FrameLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
